@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { ArrowUpRight, ArrowDownRight, ChevronDown, Activity, Maximize2, X, Briefcase, BarChart2, DollarSign } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, YAxis, XAxis, Tooltip, CartesianGrid } from 'recharts';
 import TradingWidget from '../components/TradingWidget';
+import { useTranslation } from 'react-i18next';
 
 const generateMockData = (basePrice, isUp) => {
   let p = basePrice;
@@ -170,9 +171,10 @@ const AssetIcon = ({ src, alt, symbol, size = 42 }) => {
 };
 
 const Market = () => {
-  const [activeTab, setActiveTab] = useState('crypto'); // crypto, tab, tab
+  const [activeTab, setActiveTab] = useState('crypto');
   const [expandedId, setExpandedId] = useState(null);
   const [tradeModalCoin, setTradeModalCoin] = useState(null);
+  const { t } = useTranslation();
 
   // Usamos Google S2 Favicon service para máxima fiabilidad en los logos
   const getLogo = (domain) => `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
@@ -221,8 +223,8 @@ const Market = () => {
   return (
     <div className="market-page fade-in">
       <header className="dashboard-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 style={{ fontSize: '2.4rem', margin: 0, color: 'var(--text-primary)' }}>Mercado Global</h1>
-        <p className="text-secondary" style={{ fontSize: '1.1rem', margin: '0.5rem 0 0' }}>Precios de mercado en tiempo real para activos digitales y tradicionales.</p>
+        <h1 style={{ fontSize: '2.4rem', margin: 0, color: 'var(--text-primary)' }}>{t('market.title')}</h1>
+        <p className="text-secondary" style={{ fontSize: '1.1rem', margin: '0.5rem 0 0' }}>{t('market.subtitle')}</p>
       </header>
 
       {/* Tabs de Navegación del Mercado */}
@@ -237,7 +239,7 @@ const Market = () => {
           color: activeTab === 'crypto' ? 'var(--bg-primary)' : 'var(--text-secondary)',
           fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s', whiteSpace: 'nowrap', flex: 1, justifyContent: 'center'
         }}>
-          <DollarSign size={18} /> Criptomonedas
+          <DollarSign size={18} /> {t('market.tabCrypto', 'Criptomonedas')}
         </button>
         <button onClick={() => { setActiveTab('cedear'); setExpandedId(null); }} className="market-tab-btn" style={{
           display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.2rem', border: 'none', borderRadius: '12px',
@@ -245,7 +247,7 @@ const Market = () => {
           color: activeTab === 'cedear' ? 'var(--bg-primary)' : 'var(--text-secondary)',
           fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s', whiteSpace: 'nowrap', flex: 1, justifyContent: 'center'
         }}>
-          <Briefcase size={18} /> CEDEARs
+          <Briefcase size={18} /> {t('market.tabCedear', 'CEDEARs')}
         </button>
         <button onClick={() => { setActiveTab('stock'); setExpandedId(null); }} className="market-tab-btn" style={{
           display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.2rem', border: 'none', borderRadius: '12px',
@@ -253,7 +255,7 @@ const Market = () => {
           color: activeTab === 'stock' ? 'var(--bg-primary)' : 'var(--text-secondary)',
           fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s', whiteSpace: 'nowrap', flex: 1, justifyContent: 'center'
         }}>
-          <BarChart2 size={18} /> Acciones
+          <BarChart2 size={18} /> {t('market.tabStocks', 'Acciones')}
         </button>
       </div>
 
@@ -266,12 +268,12 @@ const Market = () => {
         <table className="market-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
           <thead>
             <tr style={{ background: 'rgba(255,255,255,0.03)' }}>
-              <th className="th-asset" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>ACTIVO</th>
-              <th className="th-price" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>PRECIO (USD)</th>
-              <th className="th-change" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>24h CAMBIO</th>
-              <th className="hide-on-mobile" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>CAP. DEL MERCADO</th>
-              <th className="hide-on-mobile" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>VOLUMEN (24h)</th>
-              <th style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px', textAlign: 'right' }}>ANÁLISIS</th>
+              <th className="th-asset" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>{t('history.asset')}</th>
+              <th className="th-price" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>{t('history.price')} (USD)</th>
+              <th className="th-change" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>24h {t('market.change', 'CAMBIO')}</th>
+              <th className="hide-on-mobile" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>{t('market.cap', 'CAP. MERCADO')}</th>
+              <th className="hide-on-mobile" style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px' }}>{t('market.volume', 'VOLUMEN (24h)')}</th>
+              <th style={{ padding: '1.2rem 1.5rem', color: 'var(--text-secondary)', fontWeight: 'bold', letterSpacing: '0.5px', textAlign: 'right' }}>{t('market.analysis', 'ANÁLISIS')}</th>
             </tr>
           </thead>
           <tbody>

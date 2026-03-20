@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { User, Lock, Bell, Globe, ShieldCheck, Upload, Wallet, Link, Book, Settings2, X, CheckCircle2, AlertTriangle, Monitor, LogOut } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+import { useTranslation } from 'react-i18next';
 
 // === Componente Toast Rápido para Feedback Visual ===
 const ToastMessage = ({ message, type, onClose }) => {
@@ -62,6 +63,7 @@ const SettingToggle = ({ label, description, defaultChecked = false, onChange })
 
 const Settings = () => {
   const { user, setUser, logout } = useUser();
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('profile');
   const [toast, setToast] = useState(null);
   const fileInputRef = React.useRef(null);
@@ -74,15 +76,21 @@ const Settings = () => {
 
   // --- ESTADOS: Perfil ---
   const [profileData, setProfileData] = useState({ ...user });
-  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  
+  // Sincronizar con el usuario global si cambia (ej: post-login/register)
+  useEffect(() => {
+    if (user) setProfileData({ ...user });
+  }, [user]);
 
-  const handleProfileSave = () => {
-    setIsSavingProfile(true);
-    setTimeout(() => {
-      setUser({ ...user, ...profileData }); // Update global state
-      setIsSavingProfile(false);
+  const { updateProfile, loading: isSavingProfile } = useUser();
+
+  const handleProfileSave = async () => {
+    const result = await updateProfile(profileData);
+    if (result.success) {
       showNotification('Perfil actualizado correctamente en todo el sistema.');
-    }, 1000);
+    } else {
+      showNotification('Error al actualizar el perfil.', 'error');
+    }
   };
 
   const handleAvatarChange = (e) => {
@@ -152,8 +160,8 @@ const Settings = () => {
   return (
     <div className="settings-page fade-in">
       <header className="dashboard-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 style={{ fontSize: '2.4rem', margin: 0, color: 'var(--text-primary)' }}>Ajustes de Cuenta</h1>
-        <p className="text-secondary" style={{ fontSize: '1.1rem', margin: '0.5rem 0 0' }}>Administra tu perfil, seguridad y preferencias de la plataforma.</p>
+        <h1 style={{ fontSize: '2.4rem', margin: 0, color: 'var(--text-primary)' }}>{t('settings.title')}</h1>
+        <p className="text-secondary" style={{ fontSize: '1.1rem', margin: '0.5rem 0 0' }}>{t('settings.subtitle')}</p>
       </header>
 
       {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
@@ -163,19 +171,19 @@ const Settings = () => {
         {/* Menú Lateral de Ajustes */}
         <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
           <button onClick={() => setActiveTab('profile')} className="hover-bg" style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', padding: '1.2rem', border: 'none', background: activeTab === 'profile' ? 'rgba(0, 204, 255, 0.1)' : 'transparent', color: activeTab === 'profile' ? 'var(--accent-secondary)' : 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'left', transition: 'all 0.3s' }}>
-            <User size={20} /> Mi Perfil
+            <User size={20} /> {t('settings.tabs.profile')}
           </button>
           <button onClick={() => setActiveTab('security')} className="hover-bg" style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', padding: '1.2rem', border: 'none', background: activeTab === 'security' ? 'rgba(0, 204, 255, 0.1)' : 'transparent', color: activeTab === 'security' ? 'var(--accent-secondary)' : 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'left', transition: 'all 0.3s' }}>
-            <Lock size={20} /> Seguridad
+            <Lock size={20} /> {t('settings.tabs.security')}
           </button>
           <button onClick={() => setActiveTab('wallet')} className="hover-bg" style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', padding: '1.2rem', border: 'none', background: activeTab === 'wallet' ? 'rgba(0, 204, 255, 0.1)' : 'transparent', color: activeTab === 'wallet' ? 'var(--accent-secondary)' : 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'left', transition: 'all 0.3s' }}>
-            <Wallet size={20} /> Billetera y Redes
+            <Wallet size={20} /> {t('settings.tabs.wallet')}
           </button>
           <button onClick={() => setActiveTab('notifications')} className="hover-bg" style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', padding: '1.2rem', border: 'none', background: activeTab === 'notifications' ? 'rgba(0, 204, 255, 0.1)' : 'transparent', color: activeTab === 'notifications' ? 'var(--accent-secondary)' : 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'left', transition: 'all 0.3s' }}>
-            <Bell size={20} /> Notificaciones
+            <Bell size={20} /> {t('settings.tabs.notifications')}
           </button>
           <button onClick={() => setActiveTab('preferences')} className="hover-bg" style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', padding: '1.2rem', border: 'none', background: activeTab === 'preferences' ? 'rgba(0, 204, 255, 0.1)' : 'transparent', color: activeTab === 'preferences' ? 'var(--accent-secondary)' : 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'left', transition: 'all 0.3s' }}>
-            <Monitor size={20} /> Preferencias
+            <Monitor size={20} /> {t('settings.tabs.preferences')}
           </button>
           
           <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
@@ -188,7 +196,7 @@ const Settings = () => {
                 borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', 
                 textAlign: 'left', transition: 'all 0.3s' 
               }}>
-              <LogOut size={20} /> Cerrar Sesión
+              <LogOut size={20} /> {t('sidebar.logout')}
             </button>
           </div>
         </div>
@@ -202,16 +210,16 @@ const Settings = () => {
               <div style={{ background: 'rgba(0,204,255,0.1)', padding: '12px', borderRadius: '12px' }}>
                 <User color="var(--accent-secondary)" size={24} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.6rem' }}>Información Personal</h2>
+              <h2 style={{ margin: 0, fontSize: '1.6rem' }}>{t('settings.profile.title')}</h2>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '3rem' }}>
               <div style={{ position: 'relative' }}>
                 <div style={{ width: '110px', height: '110px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.8rem', fontWeight: '900', color: 'var(--bg-primary)', boxShadow: '0 10px 30px rgba(0, 204, 255, 0.4)', overflow: 'hidden' }}>
-                  {profileData.avatar ? (
+                  {profileData?.avatar ? (
                     <img src={profileData.avatar} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
-                    profileData.name.split(' ').map(n => n[0]).join('').toUpperCase()
+                    profileData?.name ? profileData.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U'
                   )}
                 </div>
                 <button 
@@ -238,26 +246,26 @@ const Settings = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>Nombre Completo</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>{t('settings.profile.fullName')}</label>
                 <input type="text" value={profileData.name} onChange={(e) => setProfileData({...profileData, name: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', color: '#fff', fontSize: '1rem', outline: 'none' }} />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>Nombre de Usuario (Tag)</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>{t('settings.profile.username')}</label>
                 <input type="text" value={profileData.username} onChange={(e) => setProfileData({...profileData, username: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', color: '#fff', fontSize: '1rem', outline: 'none' }} />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>Correo Electrónico</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>{t('settings.profile.email')}</label>
                 <input type="email" value="john.doe@email.com" readOnly style={{ width: '100%', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '1rem', color: 'var(--text-secondary)', fontSize: '1rem', outline: 'none', cursor: 'not-allowed' }} />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>Número de Teléfono</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 'bold' }}>{t('settings.profile.phone')}</label>
                 <input type="tel" value={profileData.phone} onChange={(e) => setProfileData({...profileData, phone: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', color: '#fff', fontSize: '1rem', outline: 'none' }} />
               </div>
             </div>
             
             <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'flex-end' }}>
               <button onClick={handleProfileSave} disabled={isSavingProfile} className="hover-lift" style={{ padding: '1rem 3rem', background: 'var(--accent-secondary)', color: 'var(--bg-primary)', border: 'none', borderRadius: '12px', fontWeight: 'bold', fontSize: '1rem', cursor: isSavingProfile ? 'not-allowed' : 'pointer', boxShadow: '0 5px 20px rgba(0, 204, 255, 0.25)', opacity: isSavingProfile ? 0.7 : 1 }}>
-                {isSavingProfile ? 'Guardando...' : 'Guardar Cambios'}
+                {isSavingProfile ? t('settings.profile.saving') : t('settings.profile.saveBtn')}
               </button>
             </div>
           </div>

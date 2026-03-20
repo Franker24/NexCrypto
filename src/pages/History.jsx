@@ -1,32 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Download as DownloadIcon, ArrowUpRight, ArrowDownRight, ArrowRightLeft, RefreshCw, Send, CheckCircle2, Clock, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const transactionsFull = [
-  { id: 1, type: 'Depósito', icon: <ArrowDownRight size={18} color="var(--success)" />, asset: 'USDT', amount: '+5,000.00 USDT', date: '18 Mar 2026, 14:30', status: 'Completado', wallet: 'Main Wallet', fee: '$0.00' },
-  { id: 2, type: 'Trade', icon: <RefreshCw size={18} color="var(--accent-secondary)" />, asset: 'BTC / USDT', amount: 'Adquirido 0.1 BTC', date: '17 Mar 2026, 09:15', status: 'Completado', wallet: 'Spot Account', fee: '$12.50' },
-  { id: 3, type: 'Retiro', icon: <Send size={18} color="var(--danger)" />, asset: 'ETH', amount: '-1.50 ETH', date: '16 Mar 2026, 18:45', status: 'Pendiente', wallet: 'External Address', fee: '$4.20' },
-  { id: 4, type: 'Swap', icon: <ArrowRightLeft size={18} color="var(--accent-primary)" />, asset: 'SOL / ETH', amount: 'Cambiado 10 SOL', date: '16 Mar 2026, 12:20', status: 'Completado', wallet: 'Liquid Swap', fee: '$2.10' },
-  { id: 5, type: 'Depósito', icon: <ArrowDownRight size={18} color="var(--success)" />, asset: 'BTC', amount: '+0.05 BTC', date: '15 Mar 2026, 08:10', status: 'Completado', wallet: 'Main Wallet', fee: '$0.00' },
-  { id: 6, type: 'Retiro', icon: <Send size={18} color="var(--danger)" />, asset: 'USDT', amount: '-1,200.00 USDT', date: '14 Mar 2026, 22:30', status: 'Completado', wallet: 'Binance Pay', fee: '$1.00' },
-  { id: 7, type: 'Trade', icon: <RefreshCw size={18} color="var(--accent-secondary)" />, asset: 'ETH / USDT', amount: 'Vendido 2.5 ETH', date: '13 Mar 2026, 11:45', status: 'Completado', wallet: 'Spot Account', fee: '$15.30' },
-  { id: 8, type: 'Swap', icon: <ArrowRightLeft size={18} color="var(--accent-primary)" />, asset: 'DAI / USDT', amount: 'Cambiado 500 DAI', date: '12 Mar 2026, 16:20', status: 'Completado', wallet: 'Stable Swap', fee: '$0.50' },
-  { id: 9, type: 'Depósito', icon: <ArrowDownRight size={18} color="var(--success)" />, asset: 'SOL', amount: '+20.50 SOL', date: '11 Mar 2026, 09:40', status: 'Completado', wallet: 'Main Wallet', fee: '$0.00' },
-  { id: 10, type: 'Retiro', icon: <Send size={18} color="var(--danger)" />, asset: 'BTC', amount: '-0.01 BTC', date: '10 Mar 2026, 21:15', status: 'Completado', wallet: 'Cold Storage', fee: '$8.50' },
-  { id: 11, type: 'Trade', icon: <RefreshCw size={18} color="var(--accent-secondary)" />, asset: 'DOT / USDT', amount: 'Comprado 100 DOT', date: '09 Mar 2026, 13:20', status: 'Completado', wallet: 'Spot Account', fee: '$3.20' },
-  { id: 12, type: 'Swap', icon: <ArrowRightLeft size={18} color="var(--accent-primary)" />, asset: 'ADA / ETH', amount: 'Cambiado 2000 ADA', date: '08 Mar 2026, 10:05', status: 'Completado', wallet: 'Governance Stake', fee: '$1.40' },
-  { id: 13, type: 'Depósito', icon: <ArrowDownRight size={18} color="var(--success)" />, asset: 'USDC', amount: '+2,500.00 USDC', date: '07 Mar 2026, 15:50', status: 'Completado', wallet: 'Main Wallet', fee: '$0.00' },
-  { id: 14, type: 'Retiro', icon: <Send size={18} color="var(--danger)" />, asset: 'SOL', amount: '-5.00 SOL', date: '06 Mar 2026, 19:10', status: 'Completado', wallet: 'Phantom Wallet', fee: '$0.01' },
-  { id: 15, type: 'Trade', icon: <RefreshCw size={18} color="var(--accent-secondary)" />, asset: 'LINK / USDT', amount: 'Vendido 50 LINK', date: '05 Mar 2026, 12:45', status: 'Completado', wallet: 'Spot Account', fee: '$2.80' },
-];
+const getIcon = (type) => {
+  switch (type) {
+    case 'Depósito': return <ArrowDownRight size={18} color="var(--success)" />;
+    case 'Trade': return <RefreshCw size={18} color="var(--accent-secondary)" />;
+    case 'Retiro': return <Send size={18} color="var(--danger)" />;
+    case 'Swap': return <ArrowRightLeft size={18} color="var(--accent-primary)" />;
+    default: return <RefreshCw size={18} />;
+  }
+};
 
 const History = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
 
-  const filteredTransactions = transactionsFull.filter(tx => {
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch('/api/transactions', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        setTransactions(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTransactions();
+  }, []);
+
+  const filteredTransactions = transactions.filter(tx => {
     const matchesSearch = tx.asset.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          tx.type.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === 'All' || tx.type === filterType;
@@ -114,35 +129,45 @@ const History = () => {
       </div>
 
       <div className="responsive-table-container glass-panel" style={{ padding: '1.5rem' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>TIPO</th>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>ACTIVO / PAR</th>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>MONTO</th>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>FECHA</th>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>ESTADO</th>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>BILLETERA</th>
-              <th style={{ padding: '1.2rem', fontWeight: 'bold', textAlign: 'right' }}>COMISIÓN</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentTransactions.map(tx => (
-              <tr key={tx.id} className="hover-lift" style={{ 
-                borderBottom: '1px solid rgba(255,255,255,0.02)', transition: 'background 0.3s',
-                cursor: 'pointer'
-              }}
-              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
-              onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-              >
-                <td style={{ padding: '1.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ padding: '8px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}>
-                      {tx.icon}
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '4rem' }}>
+            <RefreshCw size={48} className="spin" style={{ opacity: 0.5, marginBottom: '1rem' }} />
+            <p style={{ color: 'var(--text-secondary)' }}>Cargando transacciones...</p>
+            <style>{`
+              .spin { animation: spin 2s linear infinite; }
+              @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+            `}</style>
+          </div>
+        ) : (
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>TIPO</th>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>ACTIVO / PAR</th>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>MONTO</th>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>FECHA</th>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>ESTADO</th>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold' }}>BILLETERA</th>
+                <th style={{ padding: '1.2rem', fontWeight: 'bold', textAlign: 'right' }}>COMISIÓN</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentTransactions.map(tx => (
+                <tr key={tx.id} className="hover-lift" style={{ 
+                  borderBottom: '1px solid rgba(255,255,255,0.02)', transition: 'background 0.3s',
+                  cursor: 'pointer'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                >
+                  <td style={{ padding: '1.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ padding: '8px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}>
+                        {getIcon(tx.type)}
+                      </div>
+                      <span style={{ fontWeight: 'bold' }}>{tx.type}</span>
                     </div>
-                    <span style={{ fontWeight: 'bold' }}>{tx.type}</span>
-                  </div>
-                </td>
+                  </td>
                 <td style={{ padding: '1.5rem' }}>
                   <div style={{ fontWeight: '600' }}>{tx.asset}</div>
                 </td>
@@ -174,10 +199,11 @@ const History = () => {
                 </td>
               </tr>
             ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        )}
         
-        {currentTransactions.length === 0 && (
+        {!loading && currentTransactions.length === 0 && (
           <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>
             <Search size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
             <p>No se encontraron transacciones con esos criterios.</p>

@@ -6,10 +6,12 @@ import ActivityWidget from '../components/ActivityWidget';
 import PortfolioChart from '../components/PortfolioChart';
 import { Link } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
   const { user } = useUser();
-  const firstName = user.name.split(' ')[0];
+  const { t } = useTranslation();
+  const firstName = user?.name ? user.name.split(' ')[0] : t('sidebar.profile').split(' ')[0];
 
   return (
     <div className="dashboard fade-in">
@@ -21,12 +23,12 @@ const Dashboard = () => {
                 <img src={user.avatar} alt="Profile" style={{ width: '45px', height: '45px', borderRadius: '12px', objectFit: 'cover', boxShadow: '0 5px 15px rgba(0, 204, 255, 0.2)' }} />
               ) : (
                 <div style={{ width: '45px', height: '45px', borderRadius: '12px', background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--bg-primary)' }}>
-                   {user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                   {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
                 </div>
               )}
-              Mi Portafolio
+              {t('dashboard.myPortfolio')}
             </h1>
-            <p className="text-secondary" style={{ margin: '0.5rem 0 0 0', fontSize: '1.05rem' }}>Hola {firstName}. Aquí tienes el estado actual de tu cuenta.</p>
+            <p className="text-secondary" style={{ margin: '0.5rem 0 0 0', fontSize: '1.05rem' }}>{t('dashboard.hello', { name: firstName })}</p>
           </div>
           
           <div style={{ display: 'flex', gap: '1.5rem' }}>
@@ -38,7 +40,7 @@ const Dashboard = () => {
              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0, 255, 136, 0.05)'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 5px 20px rgba(0,255,136,0.15)' }}
              onMouseOut={(e) => { e.currentTarget.style.background = 'var(--bg-card)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-glass)' }}
              >
-               <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>Balance General</span>
+               <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>{t('dashboard.generalBalance')}</span>
                <span style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>$124,532.00</span>
              </div>
              
@@ -50,7 +52,7 @@ const Dashboard = () => {
              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0, 204, 255, 0.05)'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 5px 20px rgba(0,204,255,0.15)' }}
              onMouseOut={(e) => { e.currentTarget.style.background = 'var(--bg-card)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-glass)' }}
              >
-               <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>Ganancia (24h)</span>
+               <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>{t('dashboard.gain24h')}</span>
                <span style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--success)' }}>+$4,231.50</span>
              </div>
           </div>
@@ -67,7 +69,7 @@ const Dashboard = () => {
         <div className="dashboard-main-col" style={{ gridColumn: 'span 8', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '10px' }}>
-            <h3 style={{ margin: 0, fontSize: '1.4rem' }}>Rendimiento de los Activos</h3>
+            <h3 style={{ margin: 0, fontSize: '1.4rem' }}>{t('dashboard.assetPerformance')}</h3>
             <Link to="/market" className="hover-lift" style={{ 
               color: 'var(--bg-primary)', 
               background: 'var(--accent-secondary)', 
@@ -78,7 +80,7 @@ const Dashboard = () => {
               textDecoration: 'none', 
               fontWeight: 'bold',
               boxShadow: '0 4px 15px rgba(0, 204, 255, 0.3)'
-            }}>See all in Market →</Link>
+            }}>{t('dashboard.seeAllMarket')}</Link>
           </div>
 
           <PortfolioChart />

@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
-import { Hexagon, Mail, Lock, User as UserIcon, ArrowRight, Github } from 'lucide-react';
+import { Hexagon, Mail, Lock, User as UserIcon, ArrowRight } from 'lucide-react';
 import { useUser } from '../context/UserContext';
+import { useTranslation } from 'react-i18next';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { login } = useUser();
-  const [loading, setLoading] = useState(false);
+  const { login, register, loading, error: authError } = useUser();
+  const { t } = useTranslation();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [localError, setLocalError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      login();
-    }, 1200);
+    setLocalError('');
+    
+    let result;
+    if (isLogin) {
+      result = await login(email, password);
+    } else {
+      result = await register(email, password, name);
+    }
+
+    if (!result.success) {
+      setLocalError(result.message);
+    }
   };
 
   return (
@@ -44,23 +56,37 @@ const Auth = () => {
                         <Hexagon size={36} color="#fff" style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.8))' }} />
                     </div>
                     <h2 style={{ margin: 0, fontSize: '2.2rem', fontWeight: '800', letterSpacing: '-0.5px', background: 'linear-gradient(to right, #fff 30%, var(--text-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        {isLogin ? 'Bienvenido' : 'Crear Cuenta'}
+                        {isLogin ? t('auth.login') : t('auth.register')}
                     </h2>
                     <p style={{ color: 'var(--text-secondary)', marginTop: '0.6rem', textAlign: 'center', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                        {isLogin ? 'Inicia sesión para acceder a tu portafolio y operar en el mercado crypto.' : 'Únete a la plataforma de finanzas descentralizadas más avanzada.'}
+                        {isLogin ? 'Inicia sesión para acceder a tu portafolio.' : 'Únete a la plataforma más avanzada.'}
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                     {!isLogin && (
                         <div className="input-group">
-                            <input type="text" placeholder="Nombre Completo" required className="auth-input" />
+                            <input 
+                              type="text" 
+                              placeholder={t('auth.name')} 
+                              required 
+                              className="auth-input" 
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                            />
                             <UserIcon className="input-icon" size={20} />
                         </div>
                     )}
 
                     <div className="input-group">
-                        <input type="email" placeholder="Correo Electrónico" required className="auth-input" />
+                        <input 
+                          type="email" 
+                          placeholder={t('auth.email')} 
+                          required 
+                          className="auth-input" 
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
                         <Mail className="input-icon" size={20} />
                     </div>
 
@@ -68,7 +94,7 @@ const Auth = () => {
                         <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center' }}>
                             <input 
                               type="password" 
-                              placeholder="Contraseña Segura" 
+                              placeholder={t('auth.password')} 
                               required 
                               minLength="8" 
                               className="auth-input" 
@@ -99,6 +125,12 @@ const Auth = () => {
                         </div>
                     </div>
 
+                    {(localError || authError) && (
+                      <div style={{ color: 'var(--danger)', fontSize: '0.85rem', textAlign: 'center', background: 'rgba(255, 77, 77, 0.1)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255, 77, 77, 0.2)' }}>
+                        {localError || authError}
+                      </div>
+                    )}
+
                     {isLogin && (
                       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-0.5rem' }}>
                         <span className="forgot-pass">¿Olvidaste tu contraseña?</span>
@@ -106,7 +138,7 @@ const Auth = () => {
                     )}
 
                     <button type="submit" disabled={loading} className="submit-btn" style={{ opacity: loading ? 0.7 : 1 }}>
-                        {loading ? 'Procesando conexión...' : isLogin ? 'Ingresar a mi Billetera' : 'Comenzar a operar gratis'}
+                     {loading ? t('auth.loading') : isLogin ? t('auth.loginBtn') : t('auth.registerBtn')}
                         {!loading && <ArrowRight size={20} strokeWidth={3} />}
                     </button>
                 </form>
@@ -142,8 +174,8 @@ const Auth = () => {
 
                 <div style={{ marginTop: '2.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
                      {isLogin ? '¿Aún no operaste en la plataforma?' : '¿Ya posees una billetera vinculada?'} 
-                     <span onClick={() => setIsLogin(!isLogin)} className="toggle-auth">
-                        {isLogin ? 'Regístrate Libremente' : 'Inicia Sesión'}
+                      <span onClick={() => setIsLogin(!isLogin)} className="toggle-auth">
+                        {isLogin ? t('auth.switchToRegister') : t('auth.switchToLogin')}
                      </span>
                 </div>
             </div>

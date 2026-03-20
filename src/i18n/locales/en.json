@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "market": "Market",
+    "news": "News",
+    "wallet": "Wallet",
+    "settings": "Settings",
+    "history": "History"
+  },
+  "sidebar": {
+    "logout": "Log Out",
+    "profile": "My Profile",
+    "language": "Language"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email Address",
+    "password": "Password",
+    "name": "Full Name",
+    "loading": "Loading...",
+    "loginBtn": "Sign In",
+    "registerBtn": "Create Account",
+    "switchToRegister": "Don't have an account? Register",
+    "switchToLogin": "Already have an account? Login",
+    "error": "Error"
+  },
+  "dashboard": {
+    "title": "My Portfolio",
+    "myPortfolio": "My Portfolio",
+    "hello": "Hello {{name}}. Here's the current state of your account.",
+    "generalBalance": "Total Balance",
+    "gain24h": "Gain (24h)",
+    "assetPerformance": "Asset Performance",
+    "seeAllMarket": "See all in Market →"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile, security, and platform preferences.",
+    "tabs": {
+      "profile": "My Profile",
+      "security": "Security",
+      "wallet": "Wallet & Networks",
+      "notifications": "Notifications",
+      "preferences": "Preferences"
+    },
+    "profile": {
+      "title": "Personal Information",
+      "fullName": "Full Name",
+      "username": "Username (Tag)",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "saveBtn": "Save Changes",
+      "saving": "Saving...",
+      "avatarHint": "Supported formats: JPG, PNG or GIF. Max 2MB.",
+      "avatar": "Profile Photo",
+      "saved": "Profile updated successfully.",
+      "error": "Error updating profile."
+    },
+    "security": {
+      "title": "Security & Access",
+      "twofa": "Two-Factor Authentication (2FA)",
+      "twofaDesc": "Add an extra layer of security to prevent unauthorized access to your funds.",
+      "authApp": "Authenticator App (Recommended)",
+      "authAppDesc": "Use Google Authenticator or Authy to generate unique access codes.",
+      "smsAuth": "SMS Authentication",
+      "smsAuthDesc": "Receive a code by text each time you try to withdraw assets from your wallet.",
+      "updatePassword": "Update Password",
+      "currentPass": "Current Password",
+      "newPass": "New Password (8+ characters)",
+      "confirmPassword": "Confirm Password Change"
+    },
+    "wallet": {
+      "title": "Wallet Configuration",
+      "web3": "Web3 Connections",
+      "web3Desc": "Manage external wallets connected to your main account.",
+      "noWallets": "No wallets connected.",
+      "disconnect": "Disconnect",
+      "linkNew": "Link New Web3 Wallet (MetaMask/Phantom)",
+      "whitelist": "Whitelist",
+      "whitelistToggle": "Limit withdrawals to Address Book",
+      "whitelistToggleDesc": "Block any withdrawal to new addresses not saved in your book. (Requires 24h to deactivate this security rule).",
+      "manageBook": "Manage Address Book",
+      "slippage": "Slippage Tolerance",
+      "gasFee": "Gas Fee Preference (External Network)"
+    },
+    "notifications": {
+      "title": "Notification Center",
+      "priceAlerts": "Extreme Price Alerts",
+      "priceAlertsDesc": "We'll notify you if your assets change by 10%.",
+      "orderFill": "Market Order Execution",
+      "orderFillDesc": "Instant visible confirmation when a trade on your account completes successfully.",
+      "transfers": "Deposits & Withdrawals",
+      "transfersDesc": "Receive required reports on incoming or outgoing transfers from your Wallet.",
+      "newsletter": "Weekly Newsletter",
+      "newsletterDesc": "Receive the best market summary (Crypto & CEDEARs) every Sunday morning."
+    },
+    "preferences": {
+      "title": "Display Preferences",
+      "currency": "Portfolio Base Currency",
+      "currencyHint": "All market values and wallet balances will be shown in this currency.",
+      "language": "Interface Language",
+      "privacy": "Dashboard Privacy Settings",
+      "hideBalances": "Privacy Mode (Hide Balances)",
+      "hideBalancesDesc": "Keep all global balances blurred until you hover over them.",
+      "limitAnimations": "Limit graphic animations (Accessibility)",
+      "limitAnimationsDesc": "Disable glow and bright colors to improve battery performance.",
+      "languageSwitch": "Language"
+    }
+  },
+  "news": {
+    "title": "Crypto News",
+    "subtitle": "Your information bridge on the blockchain.",
+    "search": "Search news, sources...",
+    "featured": "FEATURED STORY",
+    "popular": "MOST POPULAR",
+    "recent": "MORE FOR YOU",
+    "readMore": "Read Full Article",
+    "loadMore": "Load more news",
+    "noResults": "We couldn't find news matching your search.",
+    "clearFilters": "Clear filters",
+    "results": "{{count}} results",
+    "readTime": "{{min}} min",
+    "sentiment": {
+      "bullish": "Bullish",
+      "bearish": "Bearish",
+      "neutral": "Neutral"
+    },
+    "categories": {
+      "all": "All",
+      "bitcoin": "Bitcoin",
+      "defi": "DeFi",
+      "regulation": "Regulation",
+      "market": "Market"
+    }
+  },
+  "history": {
+    "title": "Transaction History",
+    "subtitle": "Complete record of your operations.",
+    "type": "Type",
+    "asset": "ASSET",
+    "amount": "Amount",
+    "price": "PRICE",
+    "total": "Total",
+    "date": "Date",
+    "status": "Status",
+    "noData": "No transactions found."
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "subtitle": "Manage your balances, transactions and portfolio.",
+    "balance": "Total Estimated Balance",
+    "myAssets": "My Assets",
+    "distribution": "Portfolio Distribution",
+    "transactions": "Transactions",
+    "viewAll": "View All"
+  },
+  "market": {
+    "title": "Global Market",
+    "subtitle": "Real-time market prices for digital and traditional assets.",
+    "tabCrypto": "Cryptocurrencies",
+    "tabCedear": "CEDEARs",
+    "tabStocks": "Stocks",
+    "change": "CHANGE",
+    "cap": "MARKET CAP",
+    "volume": "VOLUME (24h)",
+    "analysis": "ANALYSIS"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}

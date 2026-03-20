@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, ArrowDownRight, ArrowRightLeft, RefreshCw, Send, Download, Plus } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import TransactionModal, { TransactionForm, getButtonText } from '../components/TransactionModal';
+import { useTranslation } from 'react-i18next';
 
 const allocationData = [
   { name: 'Bitcoin', symbol: 'BTC', value: 85300, color: '#F7931A' },
@@ -57,6 +58,7 @@ const Wallet = () => {
   const [activeAction, setActiveAction] = useState(null);
   const [selectedTx, setSelectedTx] = useState(null);
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
 
   const handleAction = (type) => {
     if (activeAction === type) {
@@ -78,8 +80,8 @@ const Wallet = () => {
   return (
     <div className="wallet-page fade-in">
       <header className="dashboard-header" style={{ marginBottom: '2rem' }}>
-        <h1>My Wallet</h1>
-        <p className="text-secondary" style={{ fontSize: '1.1rem' }}>Gestiona tus balances, transacciones y portafolio.</p>
+        <h1>{t('wallet.title')}</h1>
+        <p className="text-secondary" style={{ fontSize: '1.1rem' }}>{t('wallet.subtitle', 'Gestioná tus balances, transacciones y portafolio.')}</p>
       </header>
 
       <div className="wallet-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 350px)', gap: '2rem' }}>
@@ -91,7 +93,7 @@ const Wallet = () => {
           <div className="glass-panel" style={{ padding: '2.5rem', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', top: '-50%', right: '-10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(0,255,136,0.15) 0%, rgba(11,14,20,0) 70%)', borderRadius: '50%' }}></div>
             
-            <h3 style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontWeight: '500' }}>Balance Total Estimado</h3>
+            <h3 style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontWeight: '500' }}>{t('wallet.balance')}</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
               <h1 style={{ fontSize: '3.5rem', margin: 0, fontWeight: '800' }}>$124,532.00</h1>
               <span style={{ color: 'var(--text-secondary)' }}>USD</span>
@@ -142,7 +144,7 @@ const Wallet = () => {
 
           {/* Lista de Activos */}
           <div className="glass-panel" style={{ padding: '2rem' }}>
-            <h3 style={{ margin: '0 0 1.5rem 0' }}>Mis Activos</h3>
+            <h3 style={{ margin: '0 0 1.5rem 0' }}>{t('wallet.myAssets', 'Mis Activos')}</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {assetsList.map(asset => (
                 <div key={asset.id} className="hover-lift" style={{ 
@@ -175,7 +177,7 @@ const Wallet = () => {
           
           {/* Gráfico de Portafolio */}
           <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ margin: '0 0 1.5rem 0' }}>Distribución de Portafolio</h3>
+            <h3 style={{ margin: '0 0 1.5rem 0' }}>{t('wallet.distribution', 'Distribución de Portafolio')}</h3>
             <div style={{ height: '220px', width: '100%', position: 'relative' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -213,8 +215,8 @@ const Wallet = () => {
           {/* Transacciones Recientes */}
           <div className="glass-panel" style={{ padding: '2rem', flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '10px' }}>
-              <h3 style={{ margin: 0 }}>Transacciones</h3>
-              <Link to="/history" style={{ color: 'var(--accent-secondary)', fontSize: '0.9rem', cursor: 'pointer', textDecoration: 'none', fontWeight: 'bold' }}>Ver Todo</Link>
+              <h3 style={{ margin: 0 }}>{t('wallet.transactions', 'Transacciones')}</h3>
+              <Link to="/history" style={{ color: 'var(--accent-secondary)', fontSize: '0.9rem', cursor: 'pointer', textDecoration: 'none', fontWeight: 'bold' }}>{t('wallet.viewAll', 'Ver Todo')}</Link>
             </div>
             
             <div className="responsive-table-container glass-panel" style={{ padding: '0', borderRadius: '16px', border: 'none' }}>

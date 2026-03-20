@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "market": "Mercado",
+    "news": "Noticias",
+    "wallet": "Billetera",
+    "settings": "Ajustes",
+    "history": "Historial"
+  },
+  "sidebar": {
+    "logout": "Cerrar Sesión",
+    "profile": "Mi Perfil",
+    "language": "Idioma"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "name": "Nombre Completo",
+    "loading": "Cargando...",
+    "loginBtn": "Ingresar",
+    "registerBtn": "Crear Cuenta",
+    "switchToRegister": "¿No tenés cuenta? Registrate",
+    "switchToLogin": "¿Ya tenés cuenta? Inicia sesión",
+    "error": "Error"
+  },
+  "dashboard": {
+    "title": "Mi Portafolio",
+    "myPortfolio": "Mi Portafolio",
+    "hello": "Hola {{name}}. Aquí tienes el estado actual de tu cuenta.",
+    "generalBalance": "Balance General",
+    "gain24h": "Ganancia (24h)",
+    "assetPerformance": "Rendimiento de los Activos",
+    "seeAllMarket": "Ver todo en Mercado →"
+  },
+  "settings": {
+    "title": "Ajustes de Cuenta",
+    "subtitle": "Administra tu perfil, seguridad y preferencias de la plataforma.",
+    "tabs": {
+      "profile": "Mi Perfil",
+      "security": "Seguridad",
+      "wallet": "Billetera y Redes",
+      "notifications": "Notificaciones",
+      "preferences": "Preferencias"
+    },
+    "profile": {
+      "title": "Información Personal",
+      "fullName": "Nombre Completo",
+      "username": "Nombre de Usuario (Tag)",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono",
+      "saveBtn": "Guardar Cambios",
+      "saving": "Guardando...",
+      "avatarHint": "Formatos soportados: JPG, PNG o GIF. Máximo 2MB.",
+      "avatar": "Foto de Perfil",
+      "saved": "Perfil actualizado correctamente en todo el sistema.",
+      "error": "Error al actualizar el perfil."
+    },
+    "security": {
+      "title": "Seguridad y Acceso",
+      "twofa": "Autenticación de Dos Factores (2FA)",
+      "twofaDesc": "Añade una capa extra de seguridad para prevenir accesos no autorizados a tus fondos.",
+      "authApp": "Aplicación Autenticadora (Recomendado)",
+      "authAppDesc": "Usa Google Authenticator o Authy para generar códigos de acceso únicos.",
+      "smsAuth": "Autenticación por SMS",
+      "smsAuthDesc": "Recibe un código por texto cada vez que intentes retirar activos de tu billetera.",
+      "updatePassword": "Actualizar Contraseña",
+      "currentPass": "Contraseña Actual",
+      "newPass": "Nueva Contraseña (8+ caracteres)",
+      "confirmPassword": "Confirmar Cambio de Contraseña"
+    },
+    "wallet": {
+      "title": "Configuración de Wallet",
+      "web3": "Conexiones Web3",
+      "web3Desc": "Administra billeteras externas conectadas a tu cuenta principal.",
+      "noWallets": "No hay billeteras conectadas.",
+      "disconnect": "Desconectar",
+      "linkNew": "Vincular Nueva Billetera Web3 (MetaMask/Phantom)",
+      "whitelist": "Libreta Blanca (Whitelist)",
+      "whitelistToggle": "Limitar retiros a Libreta de Direcciones",
+      "whitelistToggleDesc": "Bloquea cualquier retiro a direcciones nuevas que no estén guardadas en tu libreta. (Requiere 24h para desactivar esta regla de seguridad).",
+      "manageBook": "Gestionar Libreta de Direcciones",
+      "slippage": "Tolerancia de Deslizamiento (Slippage)",
+      "gasFee": "Preferencia de Gas Fee (Red Externa)"
+    },
+    "notifications": {
+      "title": "Centro de Notificaciones",
+      "priceAlerts": "Alertas de Precios Extremos",
+      "priceAlertsDesc": "Te notificaremos si tus activos varían un 10%.",
+      "orderFill": "Ejecución de Órdenes de Mercado",
+      "orderFillDesc": "Confirmación visible al instante cuando un trade en tu cuenta se complete con éxito.",
+      "transfers": "Depósitos y Retiros",
+      "transfersDesc": "Recibe reportes obligatorios sobre transferencias entrantes o salientes de tu Wallet.",
+      "newsletter": "Boletín Semanal (Newsletter)",
+      "newsletterDesc": "Recibe el mejor resumen del mercado (Cripto y CEDEARs) todos los domingos en la mañana."
+    },
+    "preferences": {
+      "title": "Preferencias de Visualización",
+      "currency": "Moneda Base del Portafolio",
+      "currencyHint": "Todos los valores de mercado y saldos de la billetera se indicarán en esta moneda.",
+      "language": "Idioma de la Interfaz",
+      "privacy": "Ajustes de Privacidad del Dashboard",
+      "hideBalances": "Módulo de Privacidad (Ocultar Saldos)",
+      "hideBalancesDesc": "Mantén difuminados todos los balances globales de tu pantalla hasta que pases el mouse encima.",
+      "limitAnimations": "Limitar animaciones gráficas (Accesibilidad)",
+      "limitAnimationsDesc": "Deshabilita el difuminado y los colores brillantes para mejorar el rendimiento de la batería.",
+      "languageSwitch": "Idioma"
+    }
+  },
+  "news": {
+    "title": "Crypto News",
+    "subtitle": "Tu puente de información en la blockchain.",
+    "search": "Buscar noticias, fuentes...",
+    "featured": "NOTICIA DESTACADA",
+    "popular": "MÁS POPULAR",
+    "recent": "MÁS PARA TI",
+    "readMore": "Leer Nota Completa",
+    "loadMore": "Cargar más noticias",
+    "noResults": "No encontramos noticias que coincidan con tu búsqueda.",
+    "clearFilters": "Limpiar filtros",
+    "results": "{{count}} resultados",
+    "readTime": "{{min}} min",
+    "sentiment": {
+      "bullish": "Alcista",
+      "bearish": "Bajista",
+      "neutral": "Neutral"
+    },
+    "categories": {
+      "all": "Todo",
+      "bitcoin": "Bitcoin",
+      "defi": "DeFi",
+      "regulation": "Regulación",
+      "market": "Mercado"
+    }
+  },
+  "history": {
+    "title": "Historial de Transacciones",
+    "subtitle": "Registro completo de tus operaciones.",
+    "type": "Tipo",
+    "asset": "Activo",
+    "amount": "Cantidad",
+    "price": "Precio",
+    "total": "Total",
+    "date": "Fecha",
+    "status": "Estado",
+    "noData": "No se encontraron transacciones."
+  },
+  "wallet": {
+    "title": "Mi Billetera",
+    "subtitle": "Gestioná tus balances, transacciones y portafolio.",
+    "balance": "Balance Total Estimado",
+    "myAssets": "Mis Activos",
+    "distribution": "Distribución de Portafolio",
+    "transactions": "Transacciones",
+    "viewAll": "Ver Todo"
+  },
+  "market": {
+    "title": "Mercado Global",
+    "subtitle": "Precios de mercado en tiempo real para activos digitales y tradicionales.",
+    "tabCrypto": "Criptomonedas",
+    "tabCedear": "CEDEARs",
+    "tabStocks": "Acciones",
+    "change": "CAMBIO",
+    "cap": "CAP. MERCADO",
+    "volume": "VOLUMEN (24h)",
+    "analysis": "ANÁLISIS"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  }
+}
