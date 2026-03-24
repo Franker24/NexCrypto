@@ -2,6 +2,21 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
+const parseApiResponse = async (response) => {
+  const contentType = response.headers.get('content-type') || '';
+
+  if (contentType.includes('application/json')) {
+    return response.json();
+  }
+
+  const text = await response.text();
+  return {
+    message: text
+      ? `Respuesta inesperada del servidor (${response.status})`
+      : `El servidor respondio sin JSON (${response.status})`
+  };
+};
+
 export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,7 +50,7 @@ export const UserProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      const data = await response.json();
+      const data = await parseApiResponse(response);
       if (response.ok) {
         localStorage.setItem('token', data.token); // Store token
         setUser(data.user);
@@ -45,9 +60,9 @@ export const UserProvider = ({ children }) => {
         setError(data.message);
         return { success: false, message: data.message };
       }
-    } catch (err) {
-      setError('Error de conexión con el servidor');
-      return { success: false, message: 'Error de conexión' };
+    } catch {
+      setError('No se pudo conectar con el servidor');
+      return { success: false, message: 'No se pudo conectar con el servidor' };
     } finally {
       setLoading(false);
     }
@@ -62,7 +77,7 @@ export const UserProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name })
       });
-      const data = await response.json();
+      const data = await parseApiResponse(response);
       if (response.ok) {
         localStorage.setItem('token', data.token); // Store token
         setUser(data.user);
@@ -72,9 +87,9 @@ export const UserProvider = ({ children }) => {
         setError(data.message);
         return { success: false, message: data.message };
       }
-    } catch (err) {
-      setError('Error al registrar usuario');
-      return { success: false, message: 'Error de red' };
+    } catch {
+      setError('No se pudo completar el registro');
+      return { success: false, message: 'No se pudo completar el registro' };
     } finally {
       setLoading(false);
     }
@@ -100,13 +115,13 @@ export const UserProvider = ({ children }) => {
         },
         body: JSON.stringify(updatedData)
       });
-      const data = await response.json();
+      const data = await parseApiResponse(response);
       if (response.ok) {
         setUser(data.user);
         return { success: true };
       }
       return { success: false };
-    } catch (err) {
+    } catch {
       return { success: false };
     } finally {
       setLoading(false);
