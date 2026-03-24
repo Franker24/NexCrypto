@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Hexagon, Mail, Lock, User as UserIcon, ArrowRight } from 'lucide-react';
+import { Hexagon, Mail, Lock, User as UserIcon, ArrowRight, Github } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 
