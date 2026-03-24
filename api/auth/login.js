@@ -2,15 +2,20 @@ import dbConnect from '../lib/mongodb';
 import User from '../models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import readJsonBody from '../lib/readJsonBody';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = await readJsonBody(req);
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email y contraseña son obligatorios' });
+    }
+
     await dbConnect();
 
     const user = await User.findOne({ email });

@@ -1,6 +1,7 @@
 import dbConnect from './lib/mongodb';
 import User from './models/User';
 import jwt from 'jsonwebtoken';
+import readJsonBody from './lib/readJsonBody';
 
 export default async function handler(req, res) {
   const token = req.headers.authorization?.split(' ')[1];
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const updatedData = req.body;
+      const updatedData = await readJsonBody(req);
       const user = await User.findByIdAndUpdate(decoded.id, updatedData, { new: true }).select('-password');
       return res.status(200).json({
         message: 'Perfil actualizado correctamente',

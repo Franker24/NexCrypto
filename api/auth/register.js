@@ -2,19 +2,20 @@ import dbConnect from '../lib/mongodb';
 import User from '../models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import readJsonBody from '../lib/readJsonBody';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { email, password, name } = req.body;
-
-  if (!email || !password || !name) {
-    return res.status(400).json({ message: 'Faltan campos obligatorios' });
-  }
-
   try {
+    const { email, password, name } = await readJsonBody(req);
+
+    if (!email || !password || !name) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios' });
+    }
+
     await dbConnect();
 
     const userExists = await User.findOne({ email });
