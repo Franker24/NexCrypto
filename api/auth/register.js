@@ -1,5 +1,4 @@
-import dbConnect from '../lib/mongodb';
-import User from '../models/User';
+import prisma from '../lib/prisma.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import readJsonBody from '../lib/readJsonBody';
@@ -16,9 +15,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
 
-    await dbConnect();
-
-    const userExists = await User.findOne({ email });
+    const userExists = await prisma.user.findUnique({ where: { email } });
     if (userExists) {
       return res.status(400).json({ message: 'El usuario ya existe' });
     }
@@ -28,16 +25,18 @@ export default async function handler(req, res) {
 
     const username = '@' + name.toLowerCase().replace(/\s+/g, '_');
 
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      username,
-      balance: 0
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        username,
+        balance: 0
+      }
     });
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user.id },
       process.env.JWT_SECRET || 'fallback-secret',
       { expiresIn: '30d' }
     );
@@ -45,7 +44,7 @@ export default async function handler(req, res) {
     res.status(201).json({
       message: 'Registro exitoso',
       user: {
-        id: user._id,
+        id: user.id,
         name: user.name,
         email: user.email,
         username: user.username,

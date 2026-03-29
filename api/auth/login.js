@@ -1,5 +1,4 @@
-import dbConnect from '../lib/mongodb';
-import User from '../models/User';
+import prisma from '../lib/prisma.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import readJsonBody from '../lib/readJsonBody';
@@ -11,14 +10,30 @@ export default async function handler(req, res) {
 
   try {
     const { email, password } = await readJsonBody(req);
+    const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const normalizedEmail = email?.trim().toLowerCase();
 
     if (!email || !password) {
       return res.status(400).json({ message: 'Email y contraseña son obligatorios' });
     }
 
-    await dbConnect();
 
-    const user = await User.findOne({ email });
+    let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    if (!user && adminEmail && adminPassword && normalizedEmail === adminEmail && password === adminPassword) {
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      user = await prisma.user.create({
+        data: {
+        name: process.env.ADMIN_NAME?.trim() || 'Admin NexCrypto',
+        email: adminEmail,
+        password: hashedPassword,
+        username: process.env.ADMIN_USERNAME?.trim() || '@admin',
+        phone: process.env.ADMIN_PHONE?.trim() || '',
+        type: 'Owner',
+        balance: 9999999
+        }
+      });
+    }
     if (!user) {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
@@ -29,7 +44,7 @@ export default async function handler(req, res) {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user.id },
       process.env.JWT_SECRET || 'fallback-secret',
       { expiresIn: '30d' }
     );
@@ -37,7 +52,7 @@ export default async function handler(req, res) {
     res.status(200).json({
       message: 'Login exitoso',
       user: {
-        id: user._id,
+        id: user.id,
         name: user.name,
         email: user.email,
         username: user.username,
