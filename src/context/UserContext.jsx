@@ -21,14 +21,24 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(() => {
+    // Para desarrollo: usuario dummy
+    return { name: 'Visitante', avatar: null, type: 'Demo' };
+    
+    /* El código original para persistencia:
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
+    */
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Para desarrollo: siempre autenticado
+    return true;
+
+    /* El código original para persistencia:
     const saved = localStorage.getItem('auth');
     const savedUser = localStorage.getItem('user');
     return saved === 'true' && savedUser !== null;
+    */
   });
 
   // Persistir en localStorage solo para la sesión actual

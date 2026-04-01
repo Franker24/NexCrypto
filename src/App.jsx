@@ -16,12 +16,12 @@ const AppContent = () => {
 
   return (
     <Router>
-      {!isAuthenticated ? (
+      {/* {!isAuthenticated ? (
         <Routes>
           <Route path="/login" element={<Auth />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
-      ) : (
+      ) : ( */}
         <div className="app-container">
           <Sidebar />
           <main className="main-content fade-in">
@@ -32,11 +32,13 @@ const AppContent = () => {
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/history" element={<History />} />
+              {/* Login route available but not forced */}
+              <Route path="/login" element={<Auth />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
         </div>
-      )}
+      {/* )} */}
     </Router>
   );
 };
